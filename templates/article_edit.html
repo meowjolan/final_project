@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Submit Article</title>
+  <link rel="stylesheet" type="text/css" href="../static/semantic.min.css">
+
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+    crossorigin="anonymous"></script>
+  <script src="../static/semantic.min.js"></script>
+    <script>
+        String.prototype.replaceAll = function (exp, newStr) {
+            return this.replace(new RegExp(exp, "gm"), newStr);
+        };
+        String.prototype.format = function(args) {
+            var result = this;
+            if (arguments.length < 1) {
+                return result;
+            }
+
+            var data = arguments; // 如果模板参数是数组
+            if (arguments.length == 1 && typeof (args) == "object") {
+                // 如果模板参数是对象
+                data = args;
+            }
+            for ( var key in data) {
+                var value = data[key];
+                if (undefined != value) {
+                    result = result.replaceAll("\\{" + key + "\\}", value);
+                }
+            }
+            return result;
+        }
+        function AddTag() {
+            const new_tag = document.getElementById("InputNewTag").value;
+            const old_content = document.getElementById("tag").innerHTML;
+            if (new_tag.length>0) {
+                document.getElementById("tag").innerHTML = old_content +
+                        "<div class=\"ui checkbox\">" +
+                    "<input type=\"checkbox\" name=\"tags\" value=\"{0}\" checked=\"checked\">\n".format(new_tag) +
+                    "<label> {0} </label>\n".format(new_tag) +
+                "</div>";
+                document.getElementById("InputNewTag").value = "";
+            }
+        }
+    </script>
+
+  <style type="text/css">
+    body {
+        background-image: url("/static/background.png");
+        margin-top: 2em;
+        min-height: 2000px;
+        -webkit-font-smoothing: antialiased;
+        -moz-font-smoothing: grayscale;
+      }
+      .ui.borderless.menu {
+        background-color: #f8f8f8;
+        box-shadow: none;
+        flex-wrap: wrap;
+        border: none;
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .ui.borderless.menu .header.item {
+        font-size: 18px;
+        font-weight: 400;
+      }
+      .ui.mobile.only.grid .ui.menu .ui.vertical.menu {
+        display: none;
+      }
+      .ui.mobile.only.grid .ui.vertical.menu .dropdown.icon {
+        float: unset;
+      }
+      .ui.mobile.only.grid .ui.vertical.menu .dropdown.icon:before {
+        content: "\f0d7";
+      }
+      .ui.mobile.only.grid .ui.vertical.menu .ui.dropdown.item .menu {
+        position: static;
+        width: 100%;
+        background-color: unset;
+        border: none;
+        box-shadow: none;
+      }
+      .ui.mobile.only.grid .ui.vertical.menu .ui.dropdown.item .menu {
+        margin-top: 6px;
+      }
+      .ui.container > .ui.message {
+        background-color: rgb(238, 238, 238);
+        box-shadow: none;
+        padding: 4rem 2rem;
+      }
+      .ui.container h1.ui.header {
+        font-size: 2.5rem;
+        text-align: center;
+      }
+
+      .ui.raised.segment {
+          background-color: #ECF9F9;
+      }
+      @media only screen and (min-width: 768px) {
+        .ui.container h1.ui.header {
+          font-size: 4.5rem;
+        }
+      }
+      .ui.container p.lead {
+        font-size: 1.5rem;
+        color: #333333;
+        line-height: 1.4;
+        font-weight: 300;
+      }
+      .ui.container .ui.grid .row {
+        margin-bottom: 1.5rem;
+      }
+  </style>
+</head>
+
+
+
+<body>
+  <div class="ui container">
+    {% include "menu_bar.html" %}
+      <div class="ui form">
+          <div class="ui raised segment">
+              <form action="/article_edit" method="post" class="ui form">
+                  {{ articleform.hidden_tag() }}
+                  <div class="field">
+                      <a class="ui red ribbon label">Title</a>
+                      <textarea name="title" id="title" rows="1"></textarea>
+                  </div>
+                  <div class="field">
+                      <a class="ui blue ribbon label">Text</a>
+                      <textarea name="text" id="text"></textarea>
+                  </div>
+                  <a class="ui green ribbon label">Authority</a>
+                  <div class="grouped fields">
+                  <div class="field">
+                      <div class="ui radio checkbox">
+                          <input type="radio" name="authority" value="0">
+                          <label>Only you can access this article</label>
+                      </div>
+                  </div>
+                  <div class="field">
+                      <div class="ui radio checkbox">
+                          <input type="radio" name="authority" value="1" checked="checked">
+                          <label>Everyone can access this article</label>
+                      </div>
+                  </div>
+                  </div>
+                      <a class="ui yellow ribbon label">Tag</a>
+                  <div class="field">
+                      <div class="ui checkbox" id="tag">
+                          {% for tag in tags %}
+                          <div class="ui checkbox">
+                          <input type="checkbox" name="tags" value="{{ tag }}">
+                          <label>{{ tag }}</label>
+                          </div>
+                          {% endfor %}
+                      </div>
+                  </div>
+                  <div class="field">
+                      <div class="ui right labeled left icon input">
+                          <i class="tags icon"></i>
+                          <input type="text" maxlength="20" placeholder="Input new tag" id="InputNewTag">
+                          <a class="ui tag label" onclick="AddTag()">
+                            Add tag
+                          </a>
+                      </div>
+                  </div>
+              {% if articleform.title.errors or articleform.text.errors or articleform.authority.errors %}
+              <div class="ui negative message">
+                  <ul class="ui list" >
+                      {% for m in articleform.title.errors %}
+                      <li>{{ m }}</li>
+                      {% endfor %}
+                      {% for m in articleform.text.errors %}
+                      <li>{{ m }}</li>
+                      {% endfor %}
+                      {% for m in articleform.authority.errors %}
+                      <li>{{ m }}</li>
+                      {% endfor %}
+                  </ul>
+              </div>
+              {% endif %}
+              <button class="ui primary button" type="submit">Submit</button>
+              </form>
+          </div>
+      </div>
+
+  </div>
+</body>

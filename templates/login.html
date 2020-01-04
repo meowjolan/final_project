@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="stylesheet" type="text/css" href="../static/semantic.min.css">
+
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+    crossorigin="anonymous"></script>
+  <script src="../static/semantic.min.js"></script>
+
+  <style type="text/css">
+    body {
+        background-image: url("/static/background.png");
+        margin-top: 2em;
+        min-height: 2000px;
+        -webkit-font-smoothing: antialiased;
+        -moz-font-smoothing: grayscale;
+      }
+    body>.ui.container {
+      margin-top: 2em;
+    }
+
+    iframe {
+      border: none;
+      width: calc(100% + 2em);
+      margin: 0em -1em;
+      height: 300px;
+    }
+
+    iframe html {
+      overflow: hidden;
+    }
+
+    iframe body {
+      padding: 0em;
+    }
+
+    .ui.container>h1 {
+      font-size: 3em;
+      text-align: center;
+      font-weight: normal;
+    }
+
+    .ui.container>h2.dividing.header {
+      font-size: 2em;
+      font-weight: normal;
+      margin: 1em 0em 1em;
+    }
+
+    .SearchResultForm>h1 {
+      font-size: 2em;
+      text-align: left;
+      font-weight: bold;
+    }
+
+    .ref {
+      margin: auto;
+      margin-top: 2em;
+      margin-bottom: 2em;
+    }
+
+    .LoginForm {
+      margin: auto;
+      margin-top: 2em;
+      width: 35%;
+      align-content: center;
+    }
+    .ui.segment {
+      background-color: #ECF9F9;
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <div class="ui container">
+    {% include "menu_bar.html" %}
+    <div class="ui segment">
+
+
+      <div class="LoginForm">
+        <form action="/login" method="post" class="ui form">
+          {{ loginform.hidden_tag() }}
+          <p align="center">
+            <div class="field">
+              {{ loginform.username.label}} {{ loginform.username }}
+        </div>
+            <div class="field">
+                {{ loginform.password.label }} {{ loginform.password }}
+            </div>
+          </p>
+          <button class="ui primary button" type="submit">Confirm</button>
+          {% if loginform.username.errors.0 or loginform.password.errors.0 or message != False%}
+          <div class="ui negative message">
+            <ul class="ui list" >
+        {% if loginform.username.errors.0 %}
+        <li>{{ loginform.username.errors.0 }}</li>
+        {% endif %}
+        {% if loginform.password.errors.0 %}
+        <li>{{ loginform.password.errors.0 }}</li>
+        {% endif %}
+        {% if message != False %}
+          <li> {{ message }} </li>
+          {% endif %}
+            </ul>
+            </div>
+          {% endif %}
+          <div class="ui message">
+          <p align="center">New to us? <a href="register">Register</a>
+        </p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

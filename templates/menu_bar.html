@@ -1,0 +1,33 @@
+<div class="ui menu" style="background-color: #ECF9F9">
+    <a class="item" href= "/home?user_id={{ current_user.id }}" >
+        <img src="/static/logo.jpg" style="height:1.5em; width: 1.5em">
+        <p style="margin-left:1em">Home</p>
+    </a>
+    <a class="item" href="/article">
+        Article
+    </a>
+    <a class="item" href="/moment">
+        Moment
+    </a>
+    <a class="item" href="/album">
+        Album
+    </a>
+
+    <div class="right menu">
+        {% if current_user.id %}
+    <div class="item">
+      Welcome, {{ current_user.username }}
+    </div>
+     <a class="ui item" href="/friend">
+      friends
+    </a>
+    <a class="ui item" href="/logout">
+      Logout
+    </a>
+        {% else %}
+        <div class="item">
+            Welcome
+        </div>
+        {% endif %}
+  </div>
+</div>
