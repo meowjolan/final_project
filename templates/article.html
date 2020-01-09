@@ -112,6 +112,13 @@
       .ui.container .ui.grid .row {
         margin-bottom: 1.5rem;
       }
+
+      .ui.cards.box{
+         display: grid;
+         grid-template-columns: repeat(3, 1fr);
+
+       }
+
   </style>
 </head>
 
@@ -120,34 +127,37 @@
 <body>
   <div class="ui container">
     {% include "menu_bar.html" %}
-    <div class="ui one item menu">
-  <a class="active item" href="/article_edit">Submit new article</a>
-</div>
+    <div class = "ui cards box" >
       {% for c in collections %}
-      <div class="ui card">
+      <div class="ui card" style = "text-align:center;width:90%;height:90%;background-color:#ECF9F9">
   <div class="content">
     <div class="header">{{ c[1] }}</div>
   </div>
   <div class="content">
       <h4 class="ui sub header">{{ c[3]}} </h4>
-          <div class="ui borderless menu">
+          <div class="ui borderless menu" >
         {% for t in c[5] %}
-        <div class="ui item">
-          <a class="ui blue tag">
+        <div class="ui item" style="background-color:#FAEBD7;">
+          <a class="ui blue tag" >
               {{ t }}
           </a>
         </div>
         {% endfor %}
         </div>
-    <div class="ui small feed">
+    <div class="ui small feed" style="font-size:110%">
       {{ c[2] | truncate(100) }}
     </div>
   </div>
+
   <div class="extra content">
       <a class="ui bottom attached button" href="{{ url_for('article_detail', article_id=c[0]) }}">More</a>
   </div>
+
 </div>
       {% endfor %}
-
+</div>
+    <div class="ui one item menu" style="margin:30px 50px 0px 50px; text-align:center;">
+  <a class="active item" href="/article_edit" style = "background-color:#AEEEEE">Submit new article</a>
+</div>
   </div>
 </body>

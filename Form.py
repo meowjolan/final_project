@@ -42,6 +42,13 @@ class RegisterForm(FlaskForm):
                                     ],
                                     render_kw={'placeholder': 'Password'}
                                     )
+    introduction = TextAreaField('Introduction',
+                         validators=[
+                             DataRequired(message='Text cannot be empty!'),
+                             Length(1, 500, message='The length of text cannot exceed 500!')
+                         ],
+                         render_kw={'placeholder': 'introduction'})
+
     register = SubmitField('Register')
 
 
@@ -73,3 +80,38 @@ class CommentForm(FlaskForm):
                          ],
                          render_kw={'placeholder': 'Text'})
     submit = SubmitField('Submit')
+
+
+class MomentForm(FlaskForm):
+    text = TextAreaField('text',
+                         validators=[
+                             DataRequired(message='Text cannot be empty!'),
+                             Length(1, 10000, message='The length of text cannot exceed 10000!')
+                         ],
+                         render_kw={'placeholder': 'Text'})
+    authority = TextAreaField('authority',
+                              validators=[
+                                  DataRequired(message='Authority cannot be empty!')
+                              ])
+    submit = SubmitField('Submit')
+
+
+class MessageForm(FlaskForm):
+    text = TextAreaField('text',
+                         validators=[
+                             DataRequired(message='Text cannot be empty!'),
+                             Length(1, 400, message='The length of text cannot exceed 400!')
+                         ],
+                         render_kw={'placeholder': 'Text'})
+    submit = SubmitField('Submit')
+
+
+class SearchForm(FlaskForm):
+    tag_name = StringField('Tag Name',
+                            validators=[
+                                DataRequired(message='It can\' be empty!'),
+                                Length(1, 64)
+                            ],
+                            render_kw={'placeholder': 'Enter Tag Name...'}
+                            )
+    submit = SubmitField('Search')

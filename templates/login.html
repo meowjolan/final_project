@@ -92,7 +92,7 @@
                 {{ loginform.password.label }} {{ loginform.password }}
             </div>
           </p>
-          <button class="ui primary button" type="submit">Confirm</button>
+          <button class="ui primary button" type="submit" style="width: 100% ">Confirm</button>
           {% if loginform.username.errors.0 or loginform.password.errors.0 or message != False%}
           <div class="ui negative message">
             <ul class="ui list" >
@@ -115,6 +115,8 @@
         </form>
       </div>
     </div>
+
+    {% include "foot.html" %}
   </div>
 </body>
 

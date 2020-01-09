@@ -102,8 +102,11 @@
           <div class="field">
                 {{ registerform.repeat_password.label }} {{ registerform.repeat_password }}
             </div>
+          <div class="field">
+                {{ registerform.introduction.label }} {{ registerform.introduction }}
+            </div>
           </p>
-          <button class="ui primary button" type="submit">Confirm</button>
+          <button class="ui primary button" type="submit" style="width: 100%">Confirm</button>
           {% if registerform.username.errors.0 or registerform.password.errors.0 or registerform.repeat_password.errors.0 or message != False%}
             <div class="ui negative message">
             <ul class="ui list" >

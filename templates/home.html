@@ -87,8 +87,22 @@
         <p class="lead">
           {{ description }}
         </p>
-        <div class="ui massive green button">Become my friend &raquo; </div>
+
+        <form class="ui form" action="/search" method="post">
+          <input name="csrf_token" id="csrf_token" type="hidden" value="ImVlNDU4Njk2NjQ0ZGVhMGQzNDhiMTVkOGIxMzAyMjMzMzYxOGE2MzMi.EPKK0g.SFoJFZtSN7LpGkM7AYZ9wqbmfPE">
+          <div class="ui icon input" style="width: 40%">
+            <input name="tag_name" id="tag_name" required="" type="text" placeholder="Enter Tag Name..." value="">
+            <i class="search icon"></i>
+          </div>
+          <button class="ui primary button">Search</button>
+          <!-- <input id="submit" name="submit" type="submit" value="Search"> -->
+        </form>
+
       </div>
+
+
          </div>
+
+     {% include "foot.html" %}
     </div>
 </body>

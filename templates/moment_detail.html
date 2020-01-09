@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Moment</title>
+  <link rel="stylesheet" type="text/css" href="../static/semantic.min.css">
+
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+    crossorigin="anonymous"></script>
+  <script src="../static/semantic.min.js"></script>
+    <script>
+        String.prototype.replaceAll = function (exp, newStr) {
+            return this.replace(new RegExp(exp, "gm"), newStr);
+        };
+        String.prototype.format = function(args) {
+            var result = this;
+            if (arguments.length < 1) {
+                return result;
+            }
+
+            var data = arguments; // 如果模板参数是数组
+            if (arguments.length == 1 && typeof (args) == "object") {
+                // 如果模板参数是对象
+                data = args;
+            }
+            for ( var key in data) {
+                var value = data[key];
+                if (undefined != value) {
+                    result = result.replaceAll("\\{" + key + "\\}", value);
+                }
+            }
+            return result;
+        }
+        function AddTag() {
+            const new_tag = document.getElementById("InputNewTag").value;
+            const old_content = document.getElementById("tag").innerHTML;
+            if (new_tag.length>0) {
+                document.getElementById("tag").innerHTML = old_content +
+                        "<div class=\"ui checkbox\">" +
+                    "<input type=\"checkbox\" name=\"tags\" value=\"{0}\" checked=\"checked\">\n".format(new_tag) +
+                    "<label> {0} </label>\n".format(new_tag) +
+                "</div>";
+                document.getElementById("InputNewTag").value = "";
+            }
+        }
+        function gotoReply(name) {
+          document.getElementById('text').value += '@' + name + ', '
+        }
+    </script>
+
+  <style type="text/css">
+    body {
+        background-image: url("/static/background.png");
+        margin-top: 2em;
+        min-height: 2000px;
+        -webkit-font-smoothing: antialiased;
+        -moz-font-smoothing: grayscale;
+      }
+      .ui.borderless.menu {
+        background-color: #f8f8f8;
+        box-shadow: none;
+        flex-wrap: wrap;
+        border: none;
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .ui.borderless.menu .header.item {
+        font-size: 18px;
+        font-weight: 400;
+      }
+      .ui.mobile.only.grid .ui.menu .ui.vertical.menu {
+        display: none;
+      }
+      .ui.mobile.only.grid .ui.vertical.menu .dropdown.icon {
+        float: unset;
+      }
+      .ui.mobile.only.grid .ui.vertical.menu .dropdown.icon:before {
+        content: "\f0d7";
+      }
+      .ui.mobile.only.grid .ui.vertical.menu .ui.dropdown.item .menu {
+        position: static;
+        width: 100%;
+        background-color: unset;
+        border: none;
+        box-shadow: none;
+      }
+      .ui.mobile.only.grid .ui.vertical.menu .ui.dropdown.item .menu {
+        margin-top: 6px;
+      }
+      .ui.container > .ui.message {
+        background-color: rgb(238, 238, 238);
+        box-shadow: none;
+        padding: 4rem 2rem;
+      }
+      .ui.container h1.ui.header {
+        font-size: 2.5rem;
+        text-align: center;
+      }
+
+      .ui.raised.segment {
+          background-color: #ECF9F9;
+      }
+      @media only screen and (min-width: 768px) {
+        .ui.container h1.ui.header {
+          font-size: 4.5rem;
+        }
+      }
+      .ui.container p.lead {
+        font-size: 1.5rem;
+        color: #333333;
+        line-height: 1.4;
+        font-weight: 300;
+      }
+      .ui.container .ui.grid .row {
+        margin-bottom: 1.5rem;
+      }
+  </style>
+</head>
+
+
+
+<body>
+  <div class="ui container">
+    {% include "menu_bar.html" %}
+
+      <div class="ui raised very padded text container segment">
+  <h2 class="ui header">{{ moment[1] }}</h2>
+        <div class="ui borderless menu" style="background-color: #ECF9F9">
+        {% for t in tags %}
+        <div class="ui item">
+          <a class="ui blue tag">
+              {{ t }}
+          </a>
+        </div>
+        {% endfor %}
+        </div>
+        <div class="ui content">
+  {{ moment[2] }}
+        </div>
+</div>
+
+
+
+<div class="ui center raised very padded text container segment">
+    <div class="ui comments">
+  <h3 class="ui dividing header">Messages</h3>
+
+      {% for c in messages %}
+  <div class="comment">
+    <a class="avatar">
+          <i class="user icon"></i>
+        </a>
+    <div class="content">
+      <a class="author">{{ c[4] }}</a>
+      <div class="metadata">
+        <span class="date">{{ c[2] }}</span>
+      </div>
+      <div class="text">
+        {{ c[1] }}
+      </div>
+      <div class="actions">
+        <a class="reply" href="#text" id="{{ c[4] }}" onclick=gotoReply(this.id)>Reply</a>
+      </div>
+    </div>
+  </div>
+      {% endfor %}
+
+  <form action="{{ url_for('moment_detail', moment_id=moment[0]) }}" method="post" class="ui reply form">
+                  {{ messageForm.hidden_tag() }}
+    <div class="field">
+      <textarea name="text" id="text"></textarea>
+    </div>
+              {% if messageForm.text.errors %}
+              <div class="ui negative message">
+                  <ul class="ui list" >
+                      {% for m in messageForm.text.errors %}
+                      <li>{{ m }}</li>
+                      {% endfor %}
+                  </ul>
+              </div>
+              {% endif %}
+    <button class="ui blue labeled submit icon button" type="submit">
+      <i class="icon edit"></i> Submit message
+    </button>
+  </form>
+    </div>
+</div>
+
+  </div>
+</body>
